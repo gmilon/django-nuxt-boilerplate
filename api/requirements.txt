@@ -1,0 +1,7 @@
+djangorestframework==3.11.1
+markdown
+django-filter
+djoser
+social-auth-app-django
+pyyaml 
+uritemplate
