@@ -5,6 +5,7 @@
         <v-row class="flex-column-reverse flex-md-row">
           <v-col cols="12" md="6">
             <v-text-field
+              v-if="mode !== modes.forgotConfirm"
               v-model="email"
               :rules="loginRules"
               :error-messages="emailApiErrors"
@@ -14,7 +15,7 @@
             ></v-text-field>
             <v-expand-transition>
               <v-text-field
-                v-if="mode !== modes.forgot"
+                v-if="![modes.forgot, modes.forgotConfirm].includes(mode)"
                 v-model="password"
                 :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="showPwd ? 'text' : 'password'"
@@ -37,7 +38,11 @@
               ></v-text-field>
             </v-expand-transition>
 
-            <div class="d-flex pt-3 mb-5">
+            <p v-if="mode === modes.forgotConfirm">
+              A reset E-mail has been sent to {{ email }}
+            </p>
+
+            <div v-if="mode !== modes.forgotConfirm" class="d-flex pt-3 mb-5">
               <v-btn
                 type="submit"
                 large
@@ -87,6 +92,9 @@ export default {
       email: null,
       password: null,
       passwordConfirm: null,
+      token: null,
+      new_password: null,
+
       showPwd: false,
       mode: 'login',
       loading: false,
@@ -96,11 +104,14 @@ export default {
         signIn: 'login',
         signUp: 'register',
         forgot: 'forgot',
+        forgotConfirm: 'forgotConfirm',
       },
       apiErrors: {
         password: null,
         email: null,
         username: null,
+        token: null,
+        new_password: null,
       },
     }
   },
@@ -151,6 +162,7 @@ export default {
           },
         })
         .catch((e) => {
+          this.loading = false
           this.apiErrors.email = 'Login or password not correct'
         })
     },
@@ -170,16 +182,31 @@ export default {
           })
         })
         .catch((e) => {
+          this.loading = false
           if (e.response && e.response.data) {
             for (const property in e.response.data) {
               this.$set(this.apiErrors, property, e.response.data[property])
             }
           } else {
-            this.apiErrors.email = 'Error server please try again later'
+            this.apiErrors.email = 'Server error please try again later'
           }
         })
     },
-    forgot() {},
+    forgot() {
+      this.$axios
+        .$post('/api/auth/users/reset_password/', {
+          email: this.email,
+        })
+        .then(() => {
+          this.mode = this.modes.forgotConfirm
+          this.loading = false
+        })
+        .catch((e) => {
+          this.loading = false
+          this.apiErrors.email = 'Server error please try again later'
+        })
+    },
+    forgotConfirm() {},
     submitForm() {
       this.loading = true
       if (this.mode === this.modes.signIn) {
@@ -188,8 +215,9 @@ export default {
         this.signUp()
       } else if (this.mode === this.modes.forgot) {
         this.forgot()
+      } else if (this.mode === this.modes.forgotConfirm) {
+        this.forgotConfirm()
       }
-      this.loading = false
     },
     switchMode(mode) {
       this.mode = mode

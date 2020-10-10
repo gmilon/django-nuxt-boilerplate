@@ -131,3 +131,16 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
+
+
+DOMAIN = os.getenv('SITE_URL', 'localhost:3000')
+SITE_NAME = 'Nuxt / Django boilerplate'
+
+EMAIL_BACKEND = os.getenv(
+    'EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend'
+)
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'email_logs')
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': 'reset-password/{uid}/{token}/',
+}
