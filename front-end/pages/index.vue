@@ -39,10 +39,10 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="primary" v-if="!$auth.loggedIn" nuxt to="/login">
+          <v-btn v-if="!$auth.loggedIn" color="primary" nuxt to="/login">
             Login
           </v-btn>
-          <v-btn nuxt to="/todos" v-else color="primary">Check my todos</v-btn>
+          <v-btn v-else nuxt to="/todos" color="primary">Check my todos</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>

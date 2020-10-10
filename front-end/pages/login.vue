@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card class="py-8 px-6 pa-md-16">
-      <v-form v-model="valid" ref="form" @submit.prevent="submitForm">
+      <v-form ref="form" v-model="valid" @submit.prevent="submitForm">
         <v-row class="flex-column-reverse flex-md-row">
           <v-col cols="12" md="6">
             <v-text-field
@@ -15,21 +15,21 @@
             <v-expand-transition>
               <v-text-field
                 v-if="mode !== modes.forgot"
-                v-model="pwd"
+                v-model="password"
                 :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="showPwd ? 'text' : 'password'"
                 label="Password"
                 :rules="passwordRules"
                 :error-messages="apiErrors.password"
-                @click:append="showPwd = !showPwd"
                 required
                 single-line
+                @click:append="showPwd = !showPwd"
               ></v-text-field>
             </v-expand-transition>
             <v-expand-transition>
               <v-text-field
                 v-if="mode === modes.signUp"
-                v-model="pwdConfirm"
+                v-model="passwordConfirm"
                 type="password"
                 :rules="passwordRules"
                 label="Password Confirmation"
@@ -60,9 +60,9 @@
                   <a href="#" @click="switchMode(modes.signIn)">Login</a>
                 </p>
                 <a
+                  v-if="mode !== modes.forgot"
                   href="#"
                   @click="switchMode(modes.forgot)"
-                  v-if="mode !== modes.forgot"
                 >
                   Forgot your password ?
                 </a>
@@ -79,21 +79,19 @@
 </template>
 
 <script>
+import { required, email } from '../mixins/validator'
 export default {
   layout: 'auth',
   data() {
     return {
       email: null,
-      pwd: null,
-      pwdConfirm: null,
+      password: null,
+      passwordConfirm: null,
       showPwd: false,
       mode: 'login',
       loading: false,
       valid: false,
-      loginRules: [
-        (v) => !!v || 'E-mail is required',
-        (v) => /.+@.+/.test(v) || 'E-mail must be valid',
-      ],
+      loginRules: [required, email],
       modes: {
         signIn: 'login',
         signUp: 'register',
@@ -114,9 +112,11 @@ export default {
       return this.apiErrors.email
     },
     passwordRules() {
-      const base = [(v) => !!v || 'Password is required']
+      const base = [required]
       if (this.mode === this.modes.signUp) {
-        base.push((v) => v === this.pwdConfirm || 'Password are not matching')
+        base.push(
+          (v) => v === this.passwordConfirm || 'Password are not matching'
+        )
       }
       return base
     },
@@ -131,45 +131,53 @@ export default {
     },
   },
   watch: {
-    pwd() {
+    password() {
       this.validate()
     },
-    pwdConfirm() {
+    passwordConfirm() {
       this.validate()
     },
     email() {
-      this.validate()
+      this.resetApiError()
     },
   },
   methods: {
     loginUser() {
-      this.$auth.loginWith('local', {
-        data: {
-          username: this.email,
-          password: this.pwd,
-        },
-      })
-    },
-    async signUp() {
-      try {
-        const data = await this.$axios.$post('/api/auth/users/', {
-          email: this.email,
-          username: this.email,
-          password: this.pwd,
-        })
-        this.$auth.loginWith('local', {
+      this.$auth
+        .loginWith('local', {
           data: {
-            username: data.username,
-            password: this.pwd,
+            username: this.email,
+            password: this.password,
           },
         })
-      } catch (e) {
-        if (e.response && e.response.data) {
-          for (const property in e.response.data) {
-            this.$set(this.apiErrors, property, e.response.data[property])
+        .catch((e) => {
+          this.apiErrors.email = 'Login or password not correct'
+        })
+    },
+    signUp() {
+      this.$axios
+        .$post('/api/auth/users/', {
+          email: this.email,
+          username: this.email,
+          password: this.password,
+        })
+        .then(() => {
+          this.$auth.loginWith('local', {
+            data: {
+              username: this.email,
+              password: this.password,
+            },
+          })
+        })
+        .catch((e) => {
+          if (e.response && e.response.data) {
+            for (const property in e.response.data) {
+              this.$set(this.apiErrors, property, e.response.data[property])
+            }
+          } else {
+            this.apiErrors.email = 'Error server please try again later'
           }
-        }
-      }
+        })
     },
     forgot() {},
     submitForm() {
@@ -187,10 +195,13 @@ export default {
       this.mode = mode
       this.resetValidation()
     },
-    validate() {
+    resetApiError() {
       for (const property in this.apiErrors) {
         this.$set(this.apiErrors, property, null)
       }
+    },
+    validate() {
+      this.resetApiError()
       this.$refs.form.validate()
     },
     reset() {
