@@ -10,11 +10,13 @@
               :rules="loginRules"
               :error-messages="emailApiErrors"
               label="Email"
+              id="email"
               required
               single-line
             ></v-text-field>
             <v-expand-transition>
               <v-text-field
+                id="password"
                 v-if="![modes.forgot, modes.forgotConfirm].includes(mode)"
                 v-model="password"
                 :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
@@ -29,6 +31,7 @@
             </v-expand-transition>
             <v-expand-transition>
               <v-text-field
+                id="password-confirm"
                 v-if="mode === modes.signUp"
                 v-model="passwordConfirm"
                 type="password"
