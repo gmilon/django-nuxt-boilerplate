@@ -1,7 +1,7 @@
 djangorestframework==3.11.1
-markdown
-django-filter
-djoser
-social-auth-app-django
-pyyaml 
-uritemplate
+markdown==3.3.1
+django-filter==2.4.0
+djoser==2.0.5
+social-auth-app-django==4.0.0
+pyyaml==5.3.1
+uritemplate==3.0.1

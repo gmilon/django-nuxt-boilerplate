@@ -6,18 +6,18 @@
           <v-col cols="12" md="6">
             <v-text-field
               v-if="mode !== modes.forgotConfirm"
+              id="email"
               v-model="email"
               :rules="loginRules"
               :error-messages="emailApiErrors"
               label="Email"
-              id="email"
               required
               single-line
             ></v-text-field>
             <v-expand-transition>
               <v-text-field
-                id="password"
                 v-if="![modes.forgot, modes.forgotConfirm].includes(mode)"
+                id="password"
                 v-model="password"
                 :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="showPwd ? 'text' : 'password'"
@@ -31,11 +31,11 @@
             </v-expand-transition>
             <v-expand-transition>
               <v-text-field
-                id="password-confirm"
                 v-if="mode === modes.signUp"
+                id="password-confirmation"
                 v-model="passwordConfirm"
                 type="password"
-                :rules="passwordRules"
+                :rules="passwordConfirmRules"
                 label="Password Confirmation"
                 single-line
               ></v-text-field>
@@ -47,6 +47,7 @@
 
             <div v-if="mode !== modes.forgotConfirm" class="d-flex pt-3 mb-5">
               <v-btn
+                id="submit"
                 type="submit"
                 large
                 block
@@ -126,13 +127,23 @@ export default {
       return this.apiErrors.email
     },
     passwordRules() {
-      const base = [required]
+      let base = [required]
       if (this.mode === this.modes.signUp) {
-        base.push(
-          (v) => v === this.passwordConfirm || 'Password are not matching'
-        )
+        base = [
+          ...base,
+          (v) => (v !== null && v.length > 8) || 'Password is too short',
+          (v) =>
+            (v !== null && v.match(/^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z]{8,}$/)) ||
+            'Password is too weak',
+        ]
       }
       return base
+    },
+    passwordConfirmRules() {
+      return [
+        required,
+        (v) => v === this.password || 'Passwords are not matching',
+      ]
     },
     submitText() {
       if (this.mode === this.modes.signUp) {
