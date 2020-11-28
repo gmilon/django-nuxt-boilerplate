@@ -70,6 +70,7 @@
                 </p>
                 <a
                   v-if="mode !== modes.forgot"
+                  id="forgot-pwd"
                   href="#"
                   @click="switchMode(modes.forgot)"
                 >
