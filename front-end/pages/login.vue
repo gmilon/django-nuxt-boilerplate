@@ -90,7 +90,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { required, email, weakPasswordRules } from '../mixins/validator'
+import { required, email, weakPasswordRules } from '@/mixins/validator'
 
 interface ApiError {
   [key: string]: string | null

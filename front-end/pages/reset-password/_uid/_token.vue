@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { required, weakPasswordRules } from '../../../mixins/validator'
+import { required, weakPasswordRules } from '@/mixins/validator'
 export default Vue.extend({
   layout: 'auth',
   data() {
