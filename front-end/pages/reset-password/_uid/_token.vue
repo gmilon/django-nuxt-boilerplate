@@ -2,35 +2,45 @@
   <v-card class="pa-12">
     <v-form ref="form" v-model="valid" @submit.prevent="submitForm">
       <v-text-field
+        id="password"
         v-model="password"
         type="password"
-        :rules="[required]"
-        :error-messages="errors"
+        :rules="[required, ...weakPasswordRules]"
+        :error-messages="apiErrors"
         label="New Password"
       />
       <v-text-field
+        id="password-confirmation"
         v-model="passwordConfirmation"
         type="password"
         :rules="[required, passwordIdentical]"
         label="Confirmation"
       />
-      <v-btn :disabled="!valid" :loading="loading" type="submit" class="mt-6">
+      <v-btn
+        id="submit"
+        :disabled="!valid"
+        :loading="loading"
+        type="submit"
+        class="mt-6"
+      >
         RESET PASSWORD
       </v-btn>
     </v-form>
   </v-card>
 </template>
 
-<script>
-import { required } from '../../../mixins/validator'
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { required, weakPasswordRules } from '../../../mixins/validator'
+export default Vue.extend({
   layout: 'auth',
   data() {
     return {
-      password: null,
-      passwordConfirmation: null,
+      password: '',
+      passwordConfirmation: '',
       required,
-      errors: null,
+      weakPasswordRules,
+      apiErrors: '',
       loading: false,
       valid: false,
     }
@@ -51,8 +61,9 @@ export default {
       )
     },
     validate() {
-      this.errors = null
-      this.$refs.form.validate()
+      this.apiErrors = ''
+      const form: any = this.$refs.form
+      form.validate()
     },
     submitForm() {
       this.loading = true
@@ -65,15 +76,11 @@ export default {
         .then(() => {
           this.$router.push('/login')
         })
-        .catch((e) => {
-          if (e.response && e.response.data && e.response.data.new_password) {
-            this.errors = e.response.data.new_password
-          } else {
-            this.errors = 'Server error, please try again later'
-          }
+        .catch(() => {
           this.loading = false
+          this.apiErrors = 'Sorry, cannot verify your identity'
         })
     },
   },
-}
+})
 </script>

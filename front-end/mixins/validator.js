@@ -10,3 +10,10 @@ export function required(value) {
   }
   return value.trim().length !== 0 || msg
 }
+
+export const weakPasswordRules = [
+  (v) => (v !== null && v.length > 8) || 'Password is too short',
+  (v) =>
+    (v !== null && v.match(/^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z]{8,}$/)) ||
+    'Password is too weak',
+]

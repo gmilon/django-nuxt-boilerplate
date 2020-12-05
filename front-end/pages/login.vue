@@ -42,7 +42,7 @@
             </v-expand-transition>
 
             <p v-if="mode === modes.forgotConfirm">
-              A reset E-mail has been sent to {{ email }}
+              A reset email has been sent to {{ email }}
             </p>
 
             <div v-if="mode !== modes.forgotConfirm" class="d-flex pt-3 mb-5">
@@ -90,7 +90,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { required, email } from '../mixins/validator'
+import { required, email, weakPasswordRules } from '../mixins/validator'
 
 interface ApiError {
   [key: string]: string | null
@@ -142,13 +142,7 @@ export default Vue.extend({
     passwordRules() {
       let base = [required]
       if (this.mode === this.modes.signUp) {
-        base = [
-          ...base,
-          (v) => (v !== null && v.length > 8) || 'Password is too short',
-          (v) =>
-            (v !== null && v.match(/^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z]{8,}$/)) ||
-            'Password is too weak',
-        ]
+        base = [...base, ...weakPasswordRules]
       }
       return base
     },
@@ -228,9 +222,15 @@ export default Vue.extend({
           this.mode = this.modes.forgotConfirm
           this.loading = false
         })
-        .catch(() => {
+        .catch((e) => {
           this.loading = false
-          this.apiErrors.email = 'Server error please try again later'
+          if (e.response && e.response.data) {
+            for (const property in e.response.data) {
+              this.$set(this.apiErrors, property, e.response.data[property])
+            }
+          } else {
+            this.apiErrors.email = 'Server error please try again later'
+          }
         })
     },
     forgotConfirm() {},
