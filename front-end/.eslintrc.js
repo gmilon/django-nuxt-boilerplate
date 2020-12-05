@@ -8,6 +8,7 @@ module.exports = {
     parser: 'babel-eslint',
   },
   extends: [
+    '@nuxtjs/eslint-config-typescript',
     '@nuxtjs',
     'prettier',
     'prettier/vue',
@@ -17,5 +18,5 @@ module.exports = {
   plugins: ['prettier'],
   // add your custom rules here
   rules: {},
-  ignorePatterns: ['cypress/*'],
+  ignorePatterns: ['cypress/*', '*.d.ts'],
 }

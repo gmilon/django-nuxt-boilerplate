@@ -42,20 +42,23 @@
           <v-btn v-if="!$auth.loggedIn" color="primary" nuxt to="/login">
             Login
           </v-btn>
-          <v-btn v-else nuxt to="/todos" color="primary">Check my todos</v-btn>
+          <v-btn v-else nuxt to="/todos" color="primary">
+            Check my todos
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
   </v-row>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import Logo from '~/components/Logo.vue'
 
-export default {
+export default Vue.extend({
   layout: 'public',
   components: {
     Logo,
   },
-}
+})
 </script>

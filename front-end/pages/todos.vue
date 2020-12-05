@@ -1,8 +1,8 @@
 <template>
   <v-layout>
     <v-flex class="text-center">
-      <v-input v-model="login"></v-input>
-      <v-input v-model="password"></v-input>
+      <v-input v-model="login" />
+      <v-input v-model="password" />
     </v-flex>
   </v-layout>
 </template>

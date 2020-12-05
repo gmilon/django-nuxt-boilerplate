@@ -7,13 +7,13 @@
         :rules="[required]"
         :error-messages="errors"
         label="New Password"
-      ></v-text-field>
+      />
       <v-text-field
         v-model="passwordConfirmation"
         type="password"
         :rules="[required, passwordIdentical]"
         label="Confirmation"
-      ></v-text-field>
+      />
       <v-btn :disabled="!valid" :loading="loading" type="submit" class="mt-6">
         RESET PASSWORD
       </v-btn>

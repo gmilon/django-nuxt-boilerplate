@@ -40,10 +40,10 @@
 
       <div v-if="$auth.loggedIn">
         {{ $auth.user.username }}
-        <v-btn text to="/logout" @click="$auth.logout()">logout</v-btn>
+        <v-btn text to="/logout" @click="$auth.logout()"> logout </v-btn>
       </div>
       <div v-else>
-        <v-btn text to="/login">Login</v-btn>
+        <v-btn text to="/login"> Login </v-btn>
       </div>
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>mdi-menu</v-icon>

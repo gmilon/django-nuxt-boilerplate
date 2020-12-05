@@ -1,6 +1,6 @@
 const baseUrl = 'http://localhost:3000/'
 
-context('Sign In Form', function () {
+context('Forgot Pwd Form', function () {
   beforeEach(() => {
     cy.server()
     cy.visit('/login')

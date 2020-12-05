@@ -13,7 +13,7 @@
               label="Email"
               required
               single-line
-            ></v-text-field>
+            />
             <v-expand-transition>
               <v-text-field
                 v-if="![modes.forgot, modes.forgotConfirm].includes(mode)"
@@ -27,7 +27,7 @@
                 required
                 single-line
                 @click:append="showPwd = !showPwd"
-              ></v-text-field>
+              />
             </v-expand-transition>
             <v-expand-transition>
               <v-text-field
@@ -38,7 +38,7 @@
                 :rules="passwordConfirmRules"
                 label="Password Confirmation"
                 single-line
-              ></v-text-field>
+              />
             </v-expand-transition>
 
             <p v-if="mode === modes.forgotConfirm">
@@ -88,40 +88,52 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { required, email } from '../mixins/validator'
-export default {
+
+interface ApiError {
+  [key: string]: string | null
+}
+interface Modes {
+  [key: string]: string
+}
+
+export default Vue.extend({
   layout: 'auth',
   data() {
+    const apiErrors: ApiError = {
+      password: null,
+      email: null,
+      username: null,
+      token: null,
+      new_password: null,
+    }
+
+    const modes: Modes = {
+      signIn: 'login',
+      signUp: 'register',
+      forgot: 'forgot',
+      forgotConfirm: 'forgotConfirm',
+    }
+
     return {
       email: null,
       password: null,
       passwordConfirm: null,
       token: null,
       new_password: null,
-
       showPwd: false,
       mode: 'login',
       loading: false,
       valid: false,
       loginRules: [required, email],
-      modes: {
-        signIn: 'login',
-        signUp: 'register',
-        forgot: 'forgot',
-        forgotConfirm: 'forgotConfirm',
-      },
-      apiErrors: {
-        password: null,
-        email: null,
-        username: null,
-        token: null,
-        new_password: null,
-      },
+      modes,
+      apiErrors,
     }
   },
   computed: {
-    emailApiErrors() {
+    emailApiErrors(): string | null {
       if (this.apiErrors.username) {
         return this.apiErrors.username
       }
@@ -140,10 +152,10 @@ export default {
       }
       return base
     },
-    passwordConfirmRules() {
+    passwordConfirmRules(): Array<(v: string) => string | boolean> {
       return [
         required,
-        (v) => v === this.password || 'Passwords are not matching',
+        (v: string) => v === this.password || 'Passwords are not matching',
       ]
     },
     submitText() {
@@ -176,7 +188,7 @@ export default {
             password: this.password,
           },
         })
-        .catch((e) => {
+        .catch(() => {
           this.loading = false
           this.apiErrors.email = 'Login or password not correct'
         })
@@ -216,7 +228,7 @@ export default {
           this.mode = this.modes.forgotConfirm
           this.loading = false
         })
-        .catch((e) => {
+        .catch(() => {
           this.loading = false
           this.apiErrors.email = 'Server error please try again later'
         })
@@ -234,7 +246,7 @@ export default {
         this.forgotConfirm()
       }
     },
-    switchMode(mode) {
+    switchMode(mode: string) {
       this.mode = mode
       this.resetValidation()
     },
@@ -245,14 +257,17 @@ export default {
     },
     validate() {
       this.resetApiError()
-      this.$refs.form.validate()
+      const form: any = this.$refs.form
+      form.validate()
     },
     reset() {
-      this.$refs.form.reset()
+      const form: any = this.$refs.form
+      form.reset()
     },
     resetValidation() {
-      this.$refs.form.resetValidation()
+      const form: any = this.$refs.form
+      form.resetValidation()
     },
   },
-}
+})
 </script>
