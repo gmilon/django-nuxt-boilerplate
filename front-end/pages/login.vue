@@ -139,7 +139,7 @@ export default Vue.extend({
       }
       return this.apiErrors.email
     },
-    passwordRules() {
+    passwordRules(): Array<(v: string) => string | boolean> {
       let base = [required]
       if (this.mode === this.modes.signUp) {
         base = [...base, ...weakPasswordRules]
@@ -152,7 +152,7 @@ export default Vue.extend({
         (v: string) => v === this.password || 'Passwords are not matching',
       ]
     },
-    submitText() {
+    submitText(): string {
       if (this.mode === this.modes.signUp) {
         return 'Sign Up'
       }
