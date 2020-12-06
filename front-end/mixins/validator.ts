@@ -12,8 +12,9 @@ export function required(value: string): string | boolean {
 }
 
 export const weakPasswordRules = [
-  (v: string): boolean | string => v.length > 8 || 'Password is too short',
   (v: string): boolean | string =>
-    v.match(/^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z]{8,}$/) !== null ||
+    (v && v.length > 8) || 'Password is too short',
+  (v: string): boolean | string =>
+    (v && v.match(/^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z]{8,}$/) !== null) ||
     'Password is too weak',
 ]

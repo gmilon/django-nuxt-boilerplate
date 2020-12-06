@@ -130,6 +130,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES':
+        ('rest_framework.permissions.IsAuthenticatedOrReadOnly',),
 }
 
 
@@ -143,9 +145,4 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'email_logs')
 
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'reset-password/{uid}/{token}/',
-}
-
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES':
-        ('rest_framework.permissions.IsAuthenticatedOrReadOnly',),
 }
