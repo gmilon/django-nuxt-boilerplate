@@ -70,8 +70,9 @@
   </v-app>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+export default Vue.extend({
   data() {
     return {
       clipped: false,
@@ -95,5 +96,5 @@ export default {
       title: 'Vuetify.js',
     }
   },
-}
+})
 </script>

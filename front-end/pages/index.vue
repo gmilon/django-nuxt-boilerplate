@@ -56,7 +56,13 @@ import Vue from 'vue'
 import Logo from '@/components/Logo.vue'
 
 export default Vue.extend({
-  layout: 'public',
+  layout(context): string {
+    const ctx: any = context
+    if (ctx.$auth && ctx.$auth.user) {
+      return 'default'
+    }
+    return 'public'
+  },
   components: {
     Logo,
   },
