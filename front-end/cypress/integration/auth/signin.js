@@ -2,7 +2,6 @@ const baseUrl = 'http://localhost:3000/'
 
 context('Sign In Form', function () {
   beforeEach(() => {
-    cy.server()
     cy.visit('/login')
   })
   it('Should show an error on wrong email', function () {
@@ -24,11 +23,11 @@ context('Sign In Form', function () {
     cy.get('#submit').should('have.prop', 'disabled', true)
   })
   it('Should be able to login on valid form', function () {
-    cy.intercept("POST", "/api/auth/token/login", {
-      fixture: "auth/token_success",
+    cy.intercept('POST', '/api/auth/login', {
+      fixture: 'auth/token_success',
     })
-    cy.intercept("/api/auth/users/me/", {
-      fixture: "auth/users_me",
+    cy.intercept('/api/auth/user/', {
+      fixture: 'auth/users_me',
     })
     cy.get('#email').type('user@example.com')
     cy.get('#password').type('Super7trongPassWord')

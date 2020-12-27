@@ -18,17 +18,17 @@ context('Forgot password Form', function () {
     cy.get('#submit').should('have.prop', 'disabled', true)
   })
   it("Should show an error if the email doesn't exists", function () {
-    cy.intercept("POST", "/api/auth/users/reset_password/", {
+    cy.intercept('POST', '/api/auth/password/reset/', {
       statusCode: 400,
-      fixture: "auth/password_reset_error",
+      fixture: 'auth/password_reset_error',
     })
     cy.get('#email').type('test@email.com')
     cy.get('#submit').should('have.prop', 'disabled', false).click()
     cy.contains('A user with that username already exists.')
   })
   it('Should be able to submit the form on valid info and show a success Message', function () {
-    cy.intercept("POST", "/api/auth/users/reset_password/", {
-      fixture: "auth/password_reset_success",
+    cy.intercept('POST', '/api/auth/password/reset/', {
+      fixture: 'auth/password_reset_success',
     })
     cy.get('#email').type('test@email.com')
     cy.get('#submit').should('have.prop', 'disabled', false).click()

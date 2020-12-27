@@ -45,7 +45,7 @@
               A reset email has been sent to {{ email }}
             </p>
 
-            <div v-if="mode !== modes.forgotConfirm" class="d-flex pt-3 mb-5">
+            <div v-if="mode !== modes.forgotConfirm" class="pt-3 mb-5">
               <v-btn
                 id="submit"
                 type="submit"
@@ -56,6 +56,16 @@
                 :loading="loading"
               >
                 {{ submitText }}
+              </v-btn>
+              <v-btn
+                v-if="mode !== modes.forgot"
+                large
+                block
+                color="primary"
+                class="mt-3"
+                @click="loginWithGoogle"
+              >
+                Continue with google
               </v-btn>
             </div>
             <v-expand-transition>
@@ -174,13 +184,17 @@ export default Vue.extend({
     },
   },
   methods: {
+    loginWithGoogle() {
+      window.location.href = '/api/auth/google/url/'
+    },
     loginUser() {
-      this.$auth
-        .loginWith('local', {
-          data: {
-            username: this.email,
-            password: this.password,
-          },
+      this.$axios
+        .$post('/api/auth/login/', {
+          username: this.email,
+          password: this.password,
+        })
+        .then(({ key }) => {
+          this.$auth.setUserToken(key)
         })
         .catch(() => {
           this.loading = false
@@ -189,17 +203,15 @@ export default Vue.extend({
     },
     signUp() {
       this.$axios
-        .$post('/api/auth/users/', {
+        .$post('/api/auth/registration/', {
           email: this.email,
           username: this.email,
-          password: this.password,
+          password1: this.password,
+          password2: this.passwordConfirm,
         })
-        .then(() => {
-          this.$auth.loginWith('local', {
-            data: {
-              username: this.email,
-              password: this.password,
-            },
+        .then(({ key }) => {
+          this.$auth.setUserToken(key).then(() => {
+            this.$router.push('/')
           })
         })
         .catch((e) => {
@@ -215,7 +227,7 @@ export default Vue.extend({
     },
     forgot() {
       this.$axios
-        .$post('/api/auth/users/reset_password/', {
+        .$post('/api/auth/password/reset/', {
           email: this.email,
         })
         .then(() => {

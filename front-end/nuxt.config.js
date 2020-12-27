@@ -32,28 +32,31 @@ export default {
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: ['@nuxtjs/axios', '@nuxtjs/pwa', '@nuxtjs/auth', '@nuxtjs/proxy'],
+  modules: ['@nuxtjs/axios', '@nuxtjs/auth-next', '@nuxtjs/proxy'],
 
   auth: {
     strategies: {
       local: {
         endpoints: {
           login: {
-            url: '/api/auth/token/login',
+            url: '/api/auth/login/',
             method: 'post',
-            propertyName: 'auth_token',
+            propertyName: 'key',
           },
-          logout: { url: '/api/auth/token/logout/', method: 'post' },
+          logout: { url: '/api/auth/logout/', method: 'post' },
           user: {
-            url: '/api/auth/users/me/',
+            url: '/api/auth/user/',
             method: 'get',
-            propertyName: false,
           },
         },
-        tokenRequired: true,
-        tokenType: 'Token',
-        globalToken: true,
-        autoFetchUser: true,
+        user: {
+          property: false,
+        },
+        token: {
+          required: true,
+          type: 'Token',
+          global: true,
+        },
       },
     },
   },

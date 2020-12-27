@@ -68,10 +68,11 @@ export default Vue.extend({
     submitForm() {
       this.loading = true
       this.$axios
-        .$post('api/auth/users/reset_password_confirm/', {
+        .$post('api/auth/password/reset/confirm/', {
           uid: this.$route.params.uid,
           token: this.$route.params.token,
-          new_password: this.password,
+          new_password1: this.password,
+          new_password2: this.passwordConfirmation,
         })
         .then(() => {
           this.$router.push('/login')

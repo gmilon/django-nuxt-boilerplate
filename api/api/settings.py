@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -27,9 +26,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,10 +34,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
     'rest_framework',
     'rest_framework.authtoken',
-    'djoser',
+
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+
+    'users',
 ]
+
+AUTH_USER_MODEL = 'users.User'
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,7 +86,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'api.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -84,7 +95,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -104,7 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -118,12 +127,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -134,7 +141,6 @@ REST_FRAMEWORK = {
         ('rest_framework.permissions.IsAuthenticatedOrReadOnly',),
 }
 
-
 DOMAIN = os.getenv('SITE_URL', 'localhost:3000')
 SITE_NAME = 'Nuxt / Django boilerplate'
 
@@ -143,6 +149,21 @@ EMAIL_BACKEND = os.getenv(
 )
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'email_logs')
 
-DJOSER = {
-    'PASSWORD_RESET_CONFIRM_URL': 'reset-password/{uid}/{token}/',
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+        }
+    }
+}
+
+
+FRONT_END = {
+    'BASE_URL': os.getenv('FRONT_URL', 'http://localhost:3000'),
+    'OAUTH_PATH': os.getenv('FRONT_OAUTH_PATH', 'oauth'),
+    'FRONT_RESET_PWD_PATH': os.getenv('FRONT_RESET_PWD_PATH', 'reset-password'),
 }

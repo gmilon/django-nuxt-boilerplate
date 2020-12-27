@@ -46,8 +46,8 @@ context('SignUp Form', function () {
     cy.get('#submit').should('have.prop', 'disabled', false)
   })
   it('Should throw an error if the username already exists', function () {
-    cy.intercept("POST", "/api/auth/users/", {
-      fixture: "auth/users_already_exists.json",
+    cy.intercept('POST', '/api/auth/registration/', {
+      fixture: 'auth/users_already_exists.json',
       statusCode: 400,
     })
     cy.get('#email').type('excellent@gmail.com')
@@ -57,14 +57,14 @@ context('SignUp Form', function () {
     cy.contains('A user with that username already exists.')
   })
   it('Should redirect to home page if the form is valid', function () {
-    cy.intercept("POST", "/api/auth/users/", {
-      fixture: "auth/users_success",
+    cy.intercept('POST', '/api/auth/registration/', {
+      fixture: 'auth/users_success',
     })
-    cy.intercept("POST", "/api/auth/token/login", {
-      fixture: "auth/token_success",
+    cy.intercept('POST', '/api/auth/login/', {
+      fixture: 'auth/token_success',
     })
-    cy.intercept("/api/auth/users/me/", {
-      fixture: "auth/users_me",
+    cy.intercept('/api/auth/user/', {
+      fixture: 'auth/users_me',
     })
     cy.get('#email').type('excellent@gmail.com')
     cy.get('#password').type('tagada2strong')
