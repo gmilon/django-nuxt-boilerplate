@@ -65,6 +65,7 @@
                 class="mt-3"
                 @click="loginWithGoogle"
               >
+                <v-icon left dark> mdi-google </v-icon>
                 Continue with google
               </v-btn>
             </div>
