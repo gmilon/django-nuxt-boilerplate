@@ -8,5 +8,5 @@ urlpatterns = [
     path('registration/', include('dj_rest_auth.registration.urls')),
     path('google/', GoogleLogin.as_view(), name='google_login'),
     path('google/callback/', google_callback, name='google_callback'),
-    path('google/url/', google_views.oauth2_login),
+    path('google/url/', google_views.oauth2_login, name='google_url'),
 ]

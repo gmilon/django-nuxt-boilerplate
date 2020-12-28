@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
 
-    'users',
+    'users.apps.UsersConfig',
 ]
 
 AUTH_USER_MODEL = 'users.User'
