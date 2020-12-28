@@ -44,7 +44,7 @@ context('Forgot password Link', function () {
     cy.contains('Passwords are not matching')
   })
 
-  it('Should not be able to sumbit form if form is not valid', function () {
+  it('Should not be able to submit form if form is not valid', function () {
     cy.visit('/reset-password/super-token')
     cy.get('#submit').should('have.prop', 'disabled', true)
     cy.get('#password').type('weak')

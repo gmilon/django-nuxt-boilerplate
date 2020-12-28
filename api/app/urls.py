@@ -17,18 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 from rest_framework.schemas import get_schema_view
-from users.views import GoogleLogin, google_callback, reset_password
-from allauth.socialaccount.providers.google import views as google_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('allauth/', include('allauth.urls'), name='socialaccount_signup'),
-    path('reset-password/<uidb64>/<token>/', reset_password, name='password_reset_confirm'),
-    path('auth/', include('dj_rest_auth.urls')),
-    path('auth/registration/', include('dj_rest_auth.registration.urls')),
-    path('auth/google/', GoogleLogin.as_view(), name='google_login'),
-    path('auth/google/callback/', google_callback, name='google_callback'),
-    path('auth/google/url/', google_views.oauth2_login),
+    path('auth/', include('users.urls')),
     path('openapi', get_schema_view(
         title="Your Project",
         description="API for all things …",

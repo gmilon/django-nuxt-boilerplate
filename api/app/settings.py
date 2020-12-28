@@ -64,13 +64,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'api.urls'
+ROOT_URLCONF = 'app.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'api', 'templates'),
+            os.path.join(BASE_DIR, 'app', 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -84,7 +84,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'api.wsgi.application'
+WSGI_APPLICATION = 'app.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -166,4 +166,9 @@ FRONT_END = {
     'BASE_URL': os.getenv('FRONT_URL', 'http://localhost:3000'),
     'OAUTH_PATH': os.getenv('FRONT_OAUTH_PATH', 'oauth'),
     'FRONT_RESET_PWD_PATH': os.getenv('FRONT_RESET_PWD_PATH', 'reset-password'),
+}
+
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'users.serializers.UserRegisterSerializer',
 }

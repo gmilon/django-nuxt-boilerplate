@@ -14,7 +14,7 @@ context('Sign In Form', function () {
   })
   it('Should show the password', function () {
     cy.get('#password').type('tagada')
-    cy.get('.v-icon').click()
+    cy.get('.v-input__icon > .v-icon').click()
     cy.get('#password').should('have.attr', 'type', 'text')
   })
   it('Should not be able to submit on invalid form', function () {

@@ -5,4 +5,5 @@ pyyaml==5.3.1
 uritemplate==3.0.1
 django==3.1.4
 dj-rest-auth[with_social]==2.1.2
-django-allauth==0.42.0
+django-allauth==0.44.0
+model-bakery==1.2.1

@@ -14,32 +14,28 @@
               required
               single-line
             />
-            <v-expand-transition>
-              <v-text-field
-                v-if="![modes.forgot, modes.forgotConfirm].includes(mode)"
-                id="password"
-                v-model="password"
-                :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
-                :type="showPwd ? 'text' : 'password'"
-                label="Password"
-                :rules="passwordRules"
-                :error-messages="apiErrors.password"
-                required
-                single-line
-                @click:append="showPwd = !showPwd"
-              />
-            </v-expand-transition>
-            <v-expand-transition>
-              <v-text-field
-                v-if="mode === modes.signUp"
-                id="password-confirmation"
-                v-model="passwordConfirm"
-                type="password"
-                :rules="passwordConfirmRules"
-                label="Password Confirmation"
-                single-line
-              />
-            </v-expand-transition>
+            <v-text-field
+              v-if="![modes.forgot, modes.forgotConfirm].includes(mode)"
+              id="password"
+              v-model="password"
+              :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="showPwd ? 'text' : 'password'"
+              label="Password"
+              :rules="passwordRules"
+              :error-messages="apiErrors.password"
+              required
+              single-line
+              @click:append="showPwd = !showPwd"
+            />
+            <v-text-field
+              v-if="mode === modes.signUp"
+              id="password-confirmation"
+              v-model="passwordConfirm"
+              type="password"
+              :rules="passwordConfirmRules"
+              label="Password Confirmation"
+              single-line
+            />
 
             <p v-if="mode === modes.forgotConfirm">
               A reset email has been sent to {{ email }}
@@ -66,29 +62,27 @@
                 @click="loginWithGoogle"
               >
                 <v-icon left dark> mdi-google </v-icon>
-                Continue with google
+                Sign In with google
               </v-btn>
             </div>
-            <v-expand-transition>
-              <div v-if="!loading">
-                <p v-if="mode === modes.signIn">
-                  Have not an accout yet?
-                  <a href="#" @click="switchMode(modes.signUp)">Sign Up</a>
-                </p>
-                <p v-else>
-                  Go back to
-                  <a href="#" @click="switchMode(modes.signIn)">Login</a>
-                </p>
-                <a
-                  v-if="mode !== modes.forgot"
-                  id="forgot-pwd"
-                  href="#"
-                  @click="switchMode(modes.forgot)"
-                >
-                  Forgot your password ?
-                </a>
-              </div>
-            </v-expand-transition>
+            <div v-if="!loading">
+              <p v-if="mode === modes.signIn">
+                Have not an accout yet?
+                <a href="#" @click="switchMode(modes.signUp)">Sign Up</a>
+              </p>
+              <p v-else>
+                Go back to
+                <a href="#" @click="switchMode(modes.signIn)">Login</a>
+              </p>
+              <a
+                v-if="mode !== modes.forgot"
+                id="forgot-pwd"
+                href="#"
+                @click="switchMode(modes.forgot)"
+              >
+                Forgot your password ?
+              </a>
+            </div>
           </v-col>
           <v-col cols="12" md="6" class="d-flex align-center justify-center">
             <logo class="mb-10" />

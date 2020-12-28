@@ -26,7 +26,7 @@ def google_callback(request):
     return redirect(f'{base_url}/{path}/?{params}')
 
 
-def reset_password(request):
+def reset_password(request, uidb64, token):
     base_url = settings.FRONT_END.get('BASE_URL')
     path = settings.FRONT_END.get('FRONT_RESET_PWD_PATH')
-    return redirect(f'{base_url}/{path}/')
+    return redirect(f'{base_url}/{path}/{uidb64}/{token}/')
