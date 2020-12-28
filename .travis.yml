@@ -1,0 +1,15 @@
+language: python
+# python versions
+python:
+  - "3.8"
+
+# install requirements
+install:
+  - cd api && pip install -r requirements.txt
+  - cd api && pip install coveralls
+# To run tests
+script:
+  - cd api && coverage run --source='.' manage.py test
+# send coverage report to coveralls
+after_success:
+  coveralls
