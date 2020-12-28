@@ -2,7 +2,7 @@
   <div>
     <v-card class="py-8 px-6 pa-md-16">
       <v-card-title>Verifying Your account</v-card-title>
-      <v-card-subtitle v-if="error">{{ error }}</v-card-subtitle>
+      <v-card-subtitle v-if="error.length > 0">{{ error }}</v-card-subtitle>
       <v-card-subtitle v-else-if="!loggedIn">Redirecting...</v-card-subtitle>
       <v-card-subtitle v-else>Welcome !</v-card-subtitle>
     </v-card>
@@ -26,6 +26,8 @@ export default Vue.extend({
   },
   methods: {
     googleLogin(): void {
+      this.loggedIn = false
+      this.error = ''
       this.$axios
         .$post('/api/auth/google/', {
           code: this.$route.query.code,
